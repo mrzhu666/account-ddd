@@ -1,0 +1,23 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7.43
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456 # root 用户密码
+      MYSQL_MAX_CONNECTIONS: 1000 # 最大连接数
+      TZ: Asia/Shanghai # 调整时区
+    ports:
+      - "3308:3306" # 端口映射
+    volumes:
+      - ~/account-ddd/mysql:/var/lib/mysql  # 将数据目录挂载到本地目录以进行持久化
+      - ./mysql-init/init.sql:/docker-entrypoint-initdb.d/init.sql # 自动执行启动脚本
+      - ./mysql-init/init:/opt/sql  # 初始化数据
+      - ./mysql-init/backup:/opt/backup  # 数据备份目录
+    #    restart: always # 崩溃后自动重启
+    networks:
+      - account-ddd # 指定网络
+
+
+networks:
+  account-ddd:
+
