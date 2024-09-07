@@ -1,7 +1,7 @@
 version: '3'
 services:
   mysql:
-    image: mysql:5.7.43
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: 123456 # root 用户密码
       MYSQL_MAX_CONNECTIONS: 1000 # 最大连接数
@@ -16,7 +16,6 @@ services:
     #    restart: always # 崩溃后自动重启
     networks:
       - account-ddd # 指定网络
-
 
 networks:
   account-ddd:
