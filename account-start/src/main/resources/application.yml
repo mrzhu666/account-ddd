@@ -1,0 +1,41 @@
+
+
+spring:
+  # 支持 swagger3
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    throw-exception-if-no-handler-found: true
+  datasource:
+    #配置数据源类型
+    type: com.zaxxer.hikari.HikariDataSource
+    #配置连接数据库的信息
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://desktop-wsl-tailscale:3306/mybatis_plus?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+#MyBatis-Plus相关配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+    #配置日志
+    #显示相应sql语句
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDelete # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除值（默认为 1）
+      logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
+
+dubbo:
+  application:
+    logger: slf4j
+    name: AccountApplication
+  registry:
+    address: nacos://${nacos.address:desktop-wsl-tailscale}:8849
+  protocol:
+    name: dubbo
+    port: -1
+server:
+  port: 8081

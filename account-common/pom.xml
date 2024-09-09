@@ -10,6 +10,12 @@
     </parent>
 
     <artifactId>account-common</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>account-infrastructure-starter</module>
+        <module>account-client-starter</module>
+        <module>account-adapter-starter</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
