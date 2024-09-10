@@ -1,4 +1,4 @@
-package org.mrzhuyk.practice.config;
+package org.mrzhuyk.practice.exception;
 
 /**
  * 自定义异常接口

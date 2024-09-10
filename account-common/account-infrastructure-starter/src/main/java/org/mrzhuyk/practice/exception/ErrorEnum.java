@@ -1,4 +1,4 @@
-package org.mrzhuyk.practice.config;
+package org.mrzhuyk.practice.exception;
 
 
 

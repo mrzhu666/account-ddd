@@ -1,9 +1,11 @@
-package org.mrzhuyk.practice.config;
+package org.mrzhuyk.practice;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.Data;
+import org.mrzhuyk.practice.exception.BaseErrorInfoInterface;
+import org.mrzhuyk.practice.exception.BizException;
+import org.mrzhuyk.practice.exception.ErrorEnum;
 
 /**
  * 返回数据，响应封装

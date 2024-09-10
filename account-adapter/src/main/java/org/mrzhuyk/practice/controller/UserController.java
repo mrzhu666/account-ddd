@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import org.mrzhuyk.practice.config.Response;
+import org.mrzhuyk.practice.Response;
 import org.mrzhuyk.practice.dto.command.UserRegisterCmd;
 import org.mrzhuyk.practice.executor.command.UserRegisterCmdExe;
 import org.mrzhuyk.practice.executor.query.UserInfoByIdQueryExe;
