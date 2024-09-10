@@ -11,14 +11,14 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     #配置连接数据库的信息
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://desktop-wsl-tailscale:3306/mybatis_plus?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://desktop-wsl-tailscale:3308/account_ddd?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
 
 #MyBatis-Plus相关配置
 mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: false
+    map-underscore-to-camel-case: true
     #配置日志
     #显示相应sql语句
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
