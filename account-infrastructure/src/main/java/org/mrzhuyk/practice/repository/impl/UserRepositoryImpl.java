@@ -1,6 +1,7 @@
 package org.mrzhuyk.practice.repository.impl;
 
 import jakarta.annotation.Resource;
+import org.mrzhuyk.practice.convertor.UserConvertor;
 import org.mrzhuyk.practice.dataobject.UserInfoDO;
 import org.mrzhuyk.practice.domain.user.repository.UserRepository;
 import org.mrzhuyk.practice.domain.user.model.UserEntity;
@@ -17,11 +18,8 @@ public class UserRepositoryImpl implements UserRepository {
     
     @Override
     public UserEntity findByUserId(Long userId) {
-        
         UserInfoDO userInfo = userInfoMapper.selectById(userId);
         
-        
-        
-        return null;
+        return UserConvertor.convert(userInfo);
     }
 }

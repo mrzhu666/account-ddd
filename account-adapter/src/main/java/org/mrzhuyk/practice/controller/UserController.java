@@ -7,12 +7,11 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.mrzhuyk.practice.config.Response;
-import org.mrzhuyk.practice.service.UserSerivce;
+import org.mrzhuyk.practice.dto.command.UserRegisterCmd;
+import org.mrzhuyk.practice.executor.command.UserRegisterCmdExe;
+import org.mrzhuyk.practice.executor.query.UserInfoByIdQueryExe;
 import org.mrzhuyk.practice.vo.UserInfoVO;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -20,7 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     
     @Resource
-    private UserSerivce userSerivce;
+    private UserInfoByIdQueryExe userInfoByIdQueryExe;
+    
+    @Resource
+    private UserRegisterCmdExe userRegisterCmdExe;
     
     @Operation(summary = "查询用户")
     @Parameters({
@@ -28,10 +30,14 @@ public class UserController {
     })
     @GetMapping("/query")
     public Response<UserInfoVO> query(Long userId) {
-        return Response.success(userSerivce.query(userId));
+        return Response.success(userInfoByIdQueryExe.execute(userId));
     }
     
-    
+    @PostMapping("/register")
+    public Response<Long> register(@RequestBody UserRegisterCmd userRegisterCmd) {
+        
+        return Response.success(userRegisterCmdExe.execute(userRegisterCmd));
+    }
     
     @Operation(summary = "测试接口")
     @Parameters({
