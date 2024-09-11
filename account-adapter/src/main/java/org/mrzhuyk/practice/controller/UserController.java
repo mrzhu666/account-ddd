@@ -43,8 +43,8 @@ public class UserController {
     
     
     @PostMapping("/register")
-    @Operation(summary = "用户注册", description = "用户注册成功返回用户id")
-    public Response<Long> register(@Validated @RequestBody UserRegisterCmd userRegisterCmd) {
+    @Operation(summary = "用户注册", description = "用户注册成功True")
+    public Response<Boolean> register(@Validated @RequestBody UserRegisterCmd userRegisterCmd) {
         return Response.success(userRegisterCmdExe.execute(userRegisterCmd));
     }
     

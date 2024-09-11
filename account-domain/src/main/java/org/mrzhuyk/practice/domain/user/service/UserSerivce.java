@@ -11,7 +11,12 @@ public interface UserSerivce {
      * @param userId 用户ID
      * @return 用户实体
      */
-    public UserEntity query(Long userId);
+    UserEntity query(Long userId);
     
-    public Long register(UserRegisterParam userRegisterParam);
+    /**
+     * 用户注册
+     * @param userRegisterParam 用户注册Param
+     * @return true-注册成功; false-注册失败
+     */
+    Boolean register(UserRegisterParam userRegisterParam);
 }

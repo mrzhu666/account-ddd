@@ -16,8 +16,8 @@ public enum ErrorEnum implements BaseErrorInfoInterface {
     INTERNAL_SERVER_ERROR(50000, "服务器内部错误!"),
     OPERATION_ERROR(50001,"服务器正忙，请稍后再试!")
     ;
-    private int resultCode;
-    private String resultMsg;
+    private final int resultCode;
+    private final String resultMsg;
     ErrorEnum(int resultCode, String resultMsg) {
         this.resultCode = resultCode;
         this.resultMsg = resultMsg;

@@ -6,10 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class UserAggregate {
 
     private UserEntity userEntity;
+    
     
     
     

@@ -2,12 +2,14 @@ package org.mrzhuyk.practice.domain.user.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
 
 @Getter
 @Setter
+@ToString
 public class UserInfo {
     
     
@@ -51,4 +53,8 @@ public class UserInfo {
      * 注册时间
      */
     private Date registryTime;
+    
+
+    
+    
 }

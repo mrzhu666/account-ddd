@@ -12,12 +12,25 @@ import org.springframework.util.DigestUtils;
  */
 @Setter
 @Getter
-public class UserPassword {
+public class UserEncryptPassword {
+    
+    /**
+     * 加密后的密码
+     */
     private String encryptPassword;
     
+    /**
+     * 盐值
+     */
     private String salt;
     
-    public UserPassword(String password, String salt) {
+    
+    /**
+     * 保存盐值和加密后的密码，且不会存储明文密码
+     * @param password 明文密码
+     * @param salt 盐值
+     */
+    public UserEncryptPassword(String password, String salt) {
         this.salt = salt;
         this.encryptPassword = encryptPassword(password);
     }

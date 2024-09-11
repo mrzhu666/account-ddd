@@ -15,6 +15,7 @@
         <module>account-infrastructure-starter</module>
         <module>account-client-starter</module>
         <module>account-adapter-starter</module>
+        <module>account-util</module>
     </modules>
 
     <properties>

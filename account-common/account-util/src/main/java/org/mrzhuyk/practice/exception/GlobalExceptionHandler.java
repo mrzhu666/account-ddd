@@ -17,7 +17,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = BizException.class)
     public Response<String> bizExceptionHandler(BizException biz) {
-        log.error("业务异常：{}", biz.getErrorMsg()); //日志记录，用于复查
+        
+        log.error("业务异常：{}", biz.getErrorMsg()); // 日志记录，用于复查
         // 获取抛出异常的堆栈信息
         StackTraceElement[] stackTrace = biz.getStackTrace();
         if (stackTrace.length > 0) {
@@ -30,17 +31,16 @@ public class GlobalExceptionHandler {
         
         // 打印完整堆栈跟踪
         biz.printStackTrace();
-        
         return Response.error(biz);
     }
-    
     
     /**
      * 捕获其它所有异常
      */
     @ExceptionHandler(value = Exception.class)
-    public Response<String> exceptionHandler(Exception e)  {
-        log.error("服务内部异常：",e);
-        return Response.error(ErrorEnum.INTERNAL_SERVER_ERROR,"服务器异常："+e.getMessage());
+    public Response<String> exceptionHandler(Exception e) {
+        log.error("服务内部异常：", e);
+        return Response.error(ErrorEnum.INTERNAL_SERVER_ERROR, "服务器异常：" + e.getMessage());
     }
+    
 }

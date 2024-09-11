@@ -11,7 +11,7 @@ public class UserRegisterCmdExe {
     @Resource
     private UserSerivce userSerivce;
     
-    public Long execute(UserRegisterCmd userRegisterCmd) {
+    public Boolean execute(UserRegisterCmd userRegisterCmd) {
         return userSerivce.register(UserAssembler.assemble(userRegisterCmd));
     }
 }
