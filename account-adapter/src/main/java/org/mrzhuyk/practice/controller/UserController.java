@@ -6,16 +6,22 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.mrzhuyk.practice.Response;
 import org.mrzhuyk.practice.dto.command.UserRegisterCmd;
 import org.mrzhuyk.practice.executor.command.UserRegisterCmdExe;
 import org.mrzhuyk.practice.executor.query.UserInfoByIdQueryExe;
 import org.mrzhuyk.practice.vo.UserInfoVO;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+
 
 @RestController
 @RequestMapping("/api/user")
 @Tag(name = "用户接口")
+@Slf4j
 public class UserController {
     
     @Resource
@@ -23,6 +29,8 @@ public class UserController {
     
     @Resource
     private UserRegisterCmdExe userRegisterCmdExe;
+    
+
     
     @Operation(summary = "查询用户")
     @Parameters({
@@ -36,7 +44,7 @@ public class UserController {
     
     @PostMapping("/register")
     @Operation(summary = "用户注册", description = "用户注册成功返回用户id")
-    public Response<Long> register(@RequestBody UserRegisterCmd userRegisterCmd) {
+    public Response<Long> register(@Validated @RequestBody UserRegisterCmd userRegisterCmd) {
         return Response.success(userRegisterCmdExe.execute(userRegisterCmd));
     }
     
