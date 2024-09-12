@@ -1,5 +1,6 @@
 package org.mrzhuyk.practice.domain.user.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import org.springframework.util.DigestUtils;
  */
 @Setter
 @Getter
+@AllArgsConstructor
 public class UserEncryptPassword {
     
     /**

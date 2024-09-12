@@ -1,13 +1,19 @@
 package org.mrzhuyk.practice.domain.user.model;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.Setter;
 import org.mrzhuyk.practice.util.RandomUtil;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Getter
 @Setter
 public class UserEntity {
+
     
     private UserInfo userInfo;
     
@@ -21,7 +27,7 @@ public class UserEntity {
      *
      * @param password 明文密码
      */
-    public void setPassword(String password) {
+    public void setEncryptedPassword(String password) {
         userInfo.setSalt(RandomUtil.randomChars(16));
         userEncryptPassword = new UserEncryptPassword(password, userInfo.getSalt());
     }
@@ -29,7 +35,7 @@ public class UserEntity {
     /**
      * @return 加密后的密码
      */
-    public String getPassword() {
+    public String getEncryptedPassword() {
         return userEncryptPassword.getEncryptedPassword();
     }
     
@@ -42,5 +48,34 @@ public class UserEntity {
      */
     public boolean isCorrectPassword(String password) {
         return userEncryptPassword.isCorrect(password, userInfo.getSalt());
+    }
+    
+    /**
+     * 用户登录态键
+     */
+    public static final String USER_LOGIN_STATE = "userLoginState";
+    
+    /**
+     * 设置用户登录态
+     *
+     * @param userEntity 用户实体
+     */
+    public static void setSessionUserEntity(UserEntity userEntity) {
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+        HttpSession session = request.getSession();
+        session.setAttribute(USER_LOGIN_STATE, userEntity);
+    }
+    
+    /**
+     * 获取用户登录态
+     *
+     * @return 用户实体
+     */
+    public static UserEntity getSessionUserEntity() {
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+        HttpSession session = request.getSession();
+        return (UserEntity) session.getAttribute(USER_LOGIN_STATE);
     }
 }

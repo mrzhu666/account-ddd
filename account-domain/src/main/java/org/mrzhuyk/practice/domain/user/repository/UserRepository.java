@@ -5,15 +5,8 @@ import org.mrzhuyk.practice.domain.user.model.UserEntity;
 public interface UserRepository {
     
     /**
-     * 根据用户ID查询用户实体
-     * @param userId 用户ID
-     * @return 用户实体UserEntity
-     */
-    UserEntity findByUserId(Long userId);
-    
-    
-    /**
      * 插入用户数据，用于注册
+     *
      * @param userEntity 用户实体
      * @return 用户ID
      */
@@ -21,6 +14,7 @@ public interface UserRepository {
     
     /**
      * 插入邮箱认证
+     *
      * @param userEntity 用户实体
      * @return 受影响的行数
      */
@@ -29,6 +23,7 @@ public interface UserRepository {
     
     /**
      * 插入手机认证
+     *
      * @param userEntity 用户实体
      * @return 受影响的行数
      */
@@ -36,7 +31,27 @@ public interface UserRepository {
     
     
     /**
+     * 根据用户ID查询用户实体
+     *
+     * @param userId 用户ID
+     * @return 用户实体UserEntity
+     */
+    UserEntity getByUserId(Long userId);
+    
+    
+    /**
+     * 根据邮箱或者手机查询用户实体，邮箱和手机不能同时为空
+     *
+     * @param email 邮箱，可以为空
+     * @param mobile 手机，可以为空
+     * @return 用户实体，查询不到返回null
+     */
+    UserEntity getByEmailOrMobile(String email,String mobile);
+    
+    
+    /**
      * 判断邮箱是否注册过
+     *
      * @param email 邮箱
      * @return True-存在; False-不存在
      */
@@ -45,6 +60,7 @@ public interface UserRepository {
     
     /**
      * 判断手机号是否注册过
+     *
      * @param mobile 手机号
      * @return True-存在; False-不存在
      */
@@ -53,6 +69,7 @@ public interface UserRepository {
     
     /**
      * 判断昵称是否注册过
+     *
      * @param nickName 昵称
      * @return True-存在; False-不存在
      */

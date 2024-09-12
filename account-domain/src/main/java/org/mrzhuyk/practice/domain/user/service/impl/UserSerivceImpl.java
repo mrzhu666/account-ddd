@@ -3,6 +3,7 @@ package org.mrzhuyk.practice.domain.user.service.impl;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mrzhuyk.practice.domain.user.model.UserEntity;
 import org.mrzhuyk.practice.domain.user.model.UserInfo;
@@ -10,6 +11,7 @@ import org.mrzhuyk.practice.domain.user.model.copyor.UserCopyor;
 import org.mrzhuyk.practice.domain.user.param.UserRegisterParam;
 import org.mrzhuyk.practice.domain.user.repository.UserRepository;
 import org.mrzhuyk.practice.domain.user.service.UserSerivce;
+import org.mrzhuyk.practice.dto.command.UserLoginCmd;
 import org.mrzhuyk.practice.exception.BizException;
 import org.mrzhuyk.practice.exception.ErrorEnum;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,12 @@ public class UserSerivceImpl implements UserSerivce {
     
     @Override
     public UserEntity query(Long userId) {
-        return userRepository.findByUserId(userId);
+        UserEntity byUserId = userRepository.getByUserId(userId);
+        if (ObjectUtils.isEmpty(byUserId)) {
+            throw new BizException(ErrorEnum.NOT_FOUND_ERROR, "请求的用户ID不存在");
+        }
+        
+        return byUserId;
     }
     
     @Override
@@ -44,7 +51,7 @@ public class UserSerivceImpl implements UserSerivce {
         UserEntity userEntity = new UserEntity();
         userEntity.setUserInfo(userInfo);
         // 设置用户加密密码，并生成盐
-        userEntity.setPassword(userRegisterParam.getPassword());
+        userEntity.setEncryptedPassword(userRegisterParam.getPassword());
         // 插入用户数据，用于注册
         long userId = userRepository.insertUserInfo(userEntity);
         userEntity.getUserInfo().setUserId(userId);
@@ -53,11 +60,44 @@ public class UserSerivceImpl implements UserSerivce {
             userRepository.insertUserAuthEmail(userEntity);
         }
         
-        if(StringUtils.isNotBlank(userEntity.getUserInfo().getMobile())) {
+        if (StringUtils.isNotBlank(userEntity.getUserInfo().getMobile())) {
             // 插入手机认证
             userRepository.insertUserAuthMobile(userEntity);
         }
         
         return true;
+    }
+    
+    @Override
+    public UserEntity login(UserLoginCmd userLoginCmd) {
+        String mobile = userLoginCmd.getMobile();
+        String email = userLoginCmd.getEmail();
+        String password = userLoginCmd.getPassword();
+        if (StringUtils.isBlank(mobile) && StringUtils.isBlank(email)) {
+            throw new BizException(ErrorEnum.PARAMS_ERROR, "请输入手机号或邮箱");
+        }
+        if (StringUtils.isBlank(password)) {
+            throw new BizException(ErrorEnum.PARAMS_ERROR, "请输入密码");
+        }
+        
+        UserEntity userEntity = userRepository.getByEmailOrMobile(email, mobile);
+        if (ObjectUtils.isEmpty(userEntity)) {
+            throw new BizException(ErrorEnum.PARAMS_ERROR, "用户不存在或密码错误");
+        }
+        if (!userEntity.isCorrectPassword(password)) {
+            throw new BizException(ErrorEnum.PARAMS_ERROR, "用户不存在或密码错误");
+        }
+        // 设置用户态
+        UserEntity.setSessionUserEntity(userEntity);
+        return userEntity;
+    }
+    
+    @Override
+    public UserEntity status() {
+        UserEntity userEntity = UserEntity.getSessionUserEntity();
+        if (userEntity == null) {
+            throw new BizException(ErrorEnum.NOT_LOGIN_ERROR);
+        }
+        return UserEntity.getSessionUserEntity();
     }
 }

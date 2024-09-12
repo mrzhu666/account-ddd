@@ -2,6 +2,7 @@ package org.mrzhuyk.practice.repository.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.ObjectUtils;
 import org.mrzhuyk.practice.convertor.UserConvertor;
 import org.mrzhuyk.practice.dataobject.UserAuthEmailDO;
 import org.mrzhuyk.practice.dataobject.UserAuthMobileDO;
@@ -28,14 +29,52 @@ public class UserRepositoryImpl implements UserRepository {
     UserAuthMobileMapper userAuthMobileMapper;
     
     @Override
-    public UserEntity findByUserId(Long userId) {
-        UserInfoDO userInfo = userInfoMapper.selectById(userId);
+    public UserEntity getByUserId(Long userId) {
+        UserInfoDO userInfoDO = userInfoMapper.selectById(userId);
+        if (userInfoDO == null) return null;
+        UserAuthMobileDO userAuthMobileDO = userAuthMobileMapper.selectById(userId);
+        UserAuthEmailDO userAuthEmailDO = userAuthEmailMapper.selectById(userId);
         
-        if (userInfo == null) {
-            throw new BizException(ErrorEnum.NOT_FOUND_ERROR, "请求的用户ID不存在");
+        // 完全没有认证方式，一般不会发生，因为注册要求必须有认证方式
+        if (ObjectUtils.isEmpty(userAuthMobileDO) && ObjectUtils.isEmpty(userAuthEmailDO)) return null;
+        
+        if (ObjectUtils.isNotEmpty(userAuthEmailDO)) return UserConvertor.userEntity(userInfoDO, userAuthEmailDO);
+        else return UserConvertor.userEntity(userInfoDO, userAuthMobileDO);
+        
+    }
+    
+    @Override
+    public UserEntity getByEmailOrMobile(String email, String mobile) {
+        if (ObjectUtils.isEmpty(email) && ObjectUtils.isEmpty(mobile)) {
+            return null;
+        }
+        UserEntity userEntity;
+        if (ObjectUtils.isNotEmpty(email)) {
+            // 封装条件
+            LambdaQueryWrapper<UserAuthEmailDO> userAuthEmailDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            userAuthEmailDOLambdaQueryWrapper.eq(UserAuthEmailDO::getEmail, email);
+            UserAuthEmailDO userAuthEmailDO = userAuthEmailMapper.selectOne(userAuthEmailDOLambdaQueryWrapper);
+            // 查询结果为空
+            if (userAuthEmailDO == null) return null;
+            
+            Long userId = userAuthEmailDO.getUserId();
+            UserInfoDO userInfoDO = userInfoMapper.selectById(userId);
+            userEntity = UserConvertor.userEntity(userInfoDO,userAuthEmailDO);
+            
+        } else {
+            // 封装查询条件
+            LambdaQueryWrapper<UserAuthMobileDO> userAuthMobileDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            userAuthMobileDOLambdaQueryWrapper.eq(UserAuthMobileDO::getMobile, mobile);
+            UserAuthMobileDO userAuthMobileDO = userAuthMobileMapper.selectOne(userAuthMobileDOLambdaQueryWrapper);
+            // 查询结果为空
+            if (userAuthMobileDO == null) return null;
+            
+            Long userId = userAuthMobileDO.getUserId();
+            UserInfoDO userInfoDO = userInfoMapper.selectById(userId);
+            userEntity = UserConvertor.userEntity(userInfoDO,userAuthMobileDO);
         }
         
-        return UserConvertor.userEntity(userInfo);
+        return userEntity;
     }
     
     @Override

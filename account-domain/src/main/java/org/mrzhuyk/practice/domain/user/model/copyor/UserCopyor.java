@@ -16,8 +16,6 @@ public class UserCopyor {
         userInfo.setEmail(userRegisterParam.getEmail());
         userInfo.setRegistryTime(new Date());
         return userInfo;
-        
-    
     }
-
+    
 }

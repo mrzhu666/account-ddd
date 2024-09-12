@@ -6,12 +6,17 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.mrzhuyk.practice.Response;
+import org.mrzhuyk.practice.domain.user.model.UserInfo;
+import org.mrzhuyk.practice.dto.command.UserLoginCmd;
 import org.mrzhuyk.practice.dto.command.UserRegisterCmd;
+import org.mrzhuyk.practice.executor.command.UserLoginCmdExe;
 import org.mrzhuyk.practice.executor.command.UserRegisterCmdExe;
 import org.mrzhuyk.practice.executor.query.UserInfoByIdQueryExe;
+import org.mrzhuyk.practice.executor.query.UserLoginStatusQueryExe;
 import org.mrzhuyk.practice.vo.UserInfoVO;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +35,11 @@ public class UserController {
     @Resource
     private UserRegisterCmdExe userRegisterCmdExe;
     
+    @Resource
+    private UserLoginCmdExe userLoginCmdExe;
+    
+    @Resource
+    private UserLoginStatusQueryExe userLoginStatusQueryExe;
 
     
     @Operation(summary = "查询用户")
@@ -37,8 +47,20 @@ public class UserController {
         @Parameter(name = "userId", description = "用户id", required = true, in = ParameterIn.QUERY)
     })
     @GetMapping("/query")
-    public Response<UserInfoVO> query(Long userId) {
+    public Response<UserInfoVO> query(@Validated @NotNull(message = "用户id不能为空") Long userId) {
         return Response.success(userInfoByIdQueryExe.execute(userId));
+    }
+    
+    @Operation(summary = "用户登录")
+    @PostMapping("/login")
+    public Response<UserInfoVO> login(@Validated @RequestBody UserLoginCmd userLoginCmd) {
+        return Response.success(userLoginCmdExe.execute(userLoginCmd));
+    }
+    
+    @Operation(summary = "当前用户登录状态")
+    @GetMapping("/status")
+    public Response<UserInfoVO> status() {
+        return Response.success(userLoginStatusQueryExe.execute());
     }
     
     
@@ -55,6 +77,7 @@ public class UserController {
     })
     @GetMapping("/hello")
     public Response<String> test(String testId, String testName) {
+        
         return Response.success(testId + " " + testName);
     }
     

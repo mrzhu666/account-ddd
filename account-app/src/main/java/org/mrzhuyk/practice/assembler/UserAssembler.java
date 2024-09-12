@@ -2,7 +2,9 @@ package org.mrzhuyk.practice.assembler;
 import java.util.Date;
 
 import org.mrzhuyk.practice.domain.user.model.UserEntity;
+import org.mrzhuyk.practice.domain.user.param.UserLoginParam;
 import org.mrzhuyk.practice.domain.user.param.UserRegisterParam;
+import org.mrzhuyk.practice.dto.command.UserLoginCmd;
 import org.mrzhuyk.practice.dto.command.UserRegisterCmd;
 import org.mrzhuyk.practice.vo.UserInfoVO;
 import org.springframework.stereotype.Component;
@@ -28,6 +30,14 @@ public class UserAssembler {
         userRegisterParam.setEmail(userRegisterCmd.getEmail());
         userRegisterParam.setPassword(userRegisterCmd.getPassword());
         return userRegisterParam;
+    }
     
+    public static UserLoginParam userLoginParam(UserLoginCmd userLoginCmd) {
+        UserLoginParam userLoginParam = new UserLoginParam();
+        userLoginParam.setMobile(userLoginCmd.getMobile());
+        userLoginParam.setEmail(userLoginCmd.getEmail());
+        userLoginParam.setPassword(userLoginCmd.getPassword());
+        return userLoginParam;
+        
     }
 }
