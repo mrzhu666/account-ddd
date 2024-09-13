@@ -1,6 +1,6 @@
 package org.mrzhuyk.practice.mapper;
 
-import org.mrzhuyk.practice.dataobject.UserInfoDO;
+import org.mrzhuyk.practice.po.UserInfoPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-09-07 19:03:03
 * @Entity generator.domain.UserInfo
 */
-public interface UserInfoMapper extends BaseMapper<UserInfoDO> {
+public interface UserInfoMapper extends BaseMapper<UserInfoPO> {
 
 }
 

@@ -1,6 +1,6 @@
 package org.mrzhuyk.practice.mapper;
 
-import org.mrzhuyk.practice.dataobject.UserLoginLogDO;
+import org.mrzhuyk.practice.po.UserLoginLogPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-09-07 19:03:03
 * @Entity generator.domain.UserLoginLog
 */
-public interface UserLoginLogMapper extends BaseMapper<UserLoginLogDO> {
+public interface UserLoginLogMapper extends BaseMapper<UserLoginLogPO> {
 
 }
 

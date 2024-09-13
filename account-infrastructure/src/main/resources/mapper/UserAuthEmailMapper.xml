@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.mrzhuyk.practice.mapper.UserAuthEmailMapper">
 
-    <resultMap id="BaseResultMap" type="org.mrzhuyk.practice.dataobject.UserAuthEmailDO">
+    <resultMap id="BaseResultMap" type="org.mrzhuyk.practice.po.UserAuthEmailPO">
             <id property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="email" column="email" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>

@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.ObjectUtils;
 import org.mrzhuyk.practice.convertor.UserConvertor;
-import org.mrzhuyk.practice.dataobject.UserAuthEmailDO;
-import org.mrzhuyk.practice.dataobject.UserAuthMobileDO;
-import org.mrzhuyk.practice.dataobject.UserInfoDO;
+import org.mrzhuyk.practice.po.UserAuthEmailPO;
+import org.mrzhuyk.practice.po.UserAuthMobilePO;
+import org.mrzhuyk.practice.po.UserInfoPO;
 import org.mrzhuyk.practice.domain.user.repository.UserRepository;
 import org.mrzhuyk.practice.domain.user.model.UserEntity;
-import org.mrzhuyk.practice.exception.BizException;
-import org.mrzhuyk.practice.exception.ErrorEnum;
 import org.mrzhuyk.practice.mapper.UserAuthEmailMapper;
 import org.mrzhuyk.practice.mapper.UserAuthMobileMapper;
 import org.mrzhuyk.practice.mapper.UserInfoMapper;
@@ -30,16 +28,16 @@ public class UserRepositoryImpl implements UserRepository {
     
     @Override
     public UserEntity getByUserId(Long userId) {
-        UserInfoDO userInfoDO = userInfoMapper.selectById(userId);
-        if (userInfoDO == null) return null;
-        UserAuthMobileDO userAuthMobileDO = userAuthMobileMapper.selectById(userId);
-        UserAuthEmailDO userAuthEmailDO = userAuthEmailMapper.selectById(userId);
+        UserInfoPO userInfoPO = userInfoMapper.selectById(userId);
+        if (userInfoPO == null) return null;
+        UserAuthMobilePO userAuthMobilePO = userAuthMobileMapper.selectById(userId);
+        UserAuthEmailPO userAuthEmailPO = userAuthEmailMapper.selectById(userId);
         
         // 完全没有认证方式，一般不会发生，因为注册要求必须有认证方式
-        if (ObjectUtils.isEmpty(userAuthMobileDO) && ObjectUtils.isEmpty(userAuthEmailDO)) return null;
+        if (ObjectUtils.isEmpty(userAuthMobilePO) && ObjectUtils.isEmpty(userAuthEmailPO)) return null;
         
-        if (ObjectUtils.isNotEmpty(userAuthEmailDO)) return UserConvertor.userEntity(userInfoDO, userAuthEmailDO);
-        else return UserConvertor.userEntity(userInfoDO, userAuthMobileDO);
+        if (ObjectUtils.isNotEmpty(userAuthEmailPO)) return UserConvertor.userEntity(userInfoPO, userAuthEmailPO);
+        else return UserConvertor.userEntity(userInfoPO, userAuthMobilePO);
         
     }
     
@@ -51,27 +49,27 @@ public class UserRepositoryImpl implements UserRepository {
         UserEntity userEntity;
         if (ObjectUtils.isNotEmpty(email)) {
             // 封装条件
-            LambdaQueryWrapper<UserAuthEmailDO> userAuthEmailDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            userAuthEmailDOLambdaQueryWrapper.eq(UserAuthEmailDO::getEmail, email);
-            UserAuthEmailDO userAuthEmailDO = userAuthEmailMapper.selectOne(userAuthEmailDOLambdaQueryWrapper);
+            LambdaQueryWrapper<UserAuthEmailPO> userAuthEmailDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            userAuthEmailDOLambdaQueryWrapper.eq(UserAuthEmailPO::getEmail, email);
+            UserAuthEmailPO userAuthEmailPO = userAuthEmailMapper.selectOne(userAuthEmailDOLambdaQueryWrapper);
             // 查询结果为空
-            if (userAuthEmailDO == null) return null;
+            if (userAuthEmailPO == null) return null;
             
-            Long userId = userAuthEmailDO.getUserId();
-            UserInfoDO userInfoDO = userInfoMapper.selectById(userId);
-            userEntity = UserConvertor.userEntity(userInfoDO,userAuthEmailDO);
+            Long userId = userAuthEmailPO.getUserId();
+            UserInfoPO userInfoPO = userInfoMapper.selectById(userId);
+            userEntity = UserConvertor.userEntity(userInfoPO, userAuthEmailPO);
             
         } else {
             // 封装查询条件
-            LambdaQueryWrapper<UserAuthMobileDO> userAuthMobileDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            userAuthMobileDOLambdaQueryWrapper.eq(UserAuthMobileDO::getMobile, mobile);
-            UserAuthMobileDO userAuthMobileDO = userAuthMobileMapper.selectOne(userAuthMobileDOLambdaQueryWrapper);
+            LambdaQueryWrapper<UserAuthMobilePO> userAuthMobileDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            userAuthMobileDOLambdaQueryWrapper.eq(UserAuthMobilePO::getMobile, mobile);
+            UserAuthMobilePO userAuthMobilePO = userAuthMobileMapper.selectOne(userAuthMobileDOLambdaQueryWrapper);
             // 查询结果为空
-            if (userAuthMobileDO == null) return null;
+            if (userAuthMobilePO == null) return null;
             
-            Long userId = userAuthMobileDO.getUserId();
-            UserInfoDO userInfoDO = userInfoMapper.selectById(userId);
-            userEntity = UserConvertor.userEntity(userInfoDO,userAuthMobileDO);
+            Long userId = userAuthMobilePO.getUserId();
+            UserInfoPO userInfoPO = userInfoMapper.selectById(userId);
+            userEntity = UserConvertor.userEntity(userInfoPO, userAuthMobilePO);
         }
         
         return userEntity;
@@ -79,44 +77,44 @@ public class UserRepositoryImpl implements UserRepository {
     
     @Override
     public long insertUserInfo(UserEntity userEntity) {
-        UserInfoDO userInfoDO = UserConvertor.userInfoDO(userEntity.getUserInfo());
-        userInfoMapper.insert(userInfoDO);
-        return userInfoDO.getUserId();
+        UserInfoPO userInfoPO = UserConvertor.userInfoDO(userEntity.getUserInfo());
+        userInfoMapper.insert(userInfoPO);
+        return userInfoPO.getUserId();
     }
     
     @Override
     public int insertUserAuthEmail(UserEntity userEntity) {
-        UserAuthEmailDO userAuthEmailDO = UserConvertor.userAuthEmail(userEntity);
-        return userAuthEmailMapper.insert(userAuthEmailDO);
+        UserAuthEmailPO userAuthEmailPO = UserConvertor.userAuthEmail(userEntity);
+        return userAuthEmailMapper.insert(userAuthEmailPO);
     }
     
     @Override
     public int insertUserAuthMobile(UserEntity userEntity) {
-        UserAuthMobileDO userAuthMobileDO = UserConvertor.userAuthMobile(userEntity);
-        return userAuthMobileMapper.insert(userAuthMobileDO);
+        UserAuthMobilePO userAuthMobilePO = UserConvertor.userAuthMobile(userEntity);
+        return userAuthMobileMapper.insert(userAuthMobilePO);
     }
     
     
     @Override
     public Boolean checkEmail(String email) {
-        LambdaQueryWrapper<UserInfoDO> userInfoDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userInfoDOLambdaQueryWrapper.eq(UserInfoDO::getEmail, email);
+        LambdaQueryWrapper<UserInfoPO> userInfoDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userInfoDOLambdaQueryWrapper.eq(UserInfoPO::getEmail, email);
         Long count = userInfoMapper.selectCount(userInfoDOLambdaQueryWrapper);
         return count > 0;
     }
     
     @Override
     public Boolean checkMobile(String mobile) {
-        LambdaQueryWrapper<UserInfoDO> userInfoDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userInfoDOLambdaQueryWrapper.eq(UserInfoDO::getMobile, mobile);
+        LambdaQueryWrapper<UserInfoPO> userInfoDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userInfoDOLambdaQueryWrapper.eq(UserInfoPO::getMobile, mobile);
         Long count = userInfoMapper.selectCount(userInfoDOLambdaQueryWrapper);
         return count > 0;
     }
     
     @Override
     public Boolean checkNickName(String nickName) {
-        LambdaQueryWrapper<UserInfoDO> userInfoDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userInfoDOLambdaQueryWrapper.eq(UserInfoDO::getNickName, nickName);
+        LambdaQueryWrapper<UserInfoPO> userInfoDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userInfoDOLambdaQueryWrapper.eq(UserInfoPO::getNickName, nickName);
         Long count = userInfoMapper.selectCount(userInfoDOLambdaQueryWrapper);
         return count > 0;
     }

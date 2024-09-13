@@ -1,4 +1,4 @@
-package org.mrzhuyk.practice.dataobject;
+package org.mrzhuyk.practice.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -10,12 +10,12 @@ import lombok.Data;
 import org.mrzhuyk.practice.model.BaseDO;
 
 /**
- * 用户登录日志表
- * @TableName user_login_log
+ * 用户登出日志表
+ * @TableName user_logout_log
  */
-@TableName(value ="user_login_log")
+@TableName(value ="user_logout_log")
 @Data
-public class UserLoginLogDO extends BaseDO implements Serializable {
+public class UserLogoutLogPO extends BaseDO implements Serializable {
     /**
      * 自增ID
      */
@@ -28,9 +28,9 @@ public class UserLoginLogDO extends BaseDO implements Serializable {
     private Long userId;
 
     /**
-     * 登录方式：1:手机;2:邮箱
+     * 登出方式：1:手机;2:邮箱
      */
-    private Integer loginType;
+    private Integer logoutType;
 
     /**
      * 登录设备：1:手机;2:web
@@ -40,7 +40,7 @@ public class UserLoginLogDO extends BaseDO implements Serializable {
     /**
      * 登录时间
      */
-    private Date loginTime;
+    private Date logoutTime;
 
     /**
      * 登录IP地址
@@ -62,12 +62,12 @@ public class UserLoginLogDO extends BaseDO implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        UserLoginLogDO other = (UserLoginLogDO) that;
+        UserLogoutLogPO other = (UserLogoutLogPO) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getLoginType() == null ? other.getLoginType() == null : this.getLoginType().equals(other.getLoginType()))
+            && (this.getLogoutType() == null ? other.getLogoutType() == null : this.getLogoutType().equals(other.getLogoutType()))
             && (this.getDevice() == null ? other.getDevice() == null : this.getDevice().equals(other.getDevice()))
-            && (this.getLoginTime() == null ? other.getLoginTime() == null : this.getLoginTime().equals(other.getLoginTime()))
+            && (this.getLogoutTime() == null ? other.getLogoutTime() == null : this.getLogoutTime().equals(other.getLogoutTime()))
             && (this.getIp() == null ? other.getIp() == null : this.getIp().equals(other.getIp()))
             && (this.getCreateUser() == null ? other.getCreateUser() == null : this.getCreateUser().equals(other.getCreateUser()))
             && (this.getUpdateUser() == null ? other.getUpdateUser() == null : this.getUpdateUser().equals(other.getUpdateUser()))
@@ -83,9 +83,9 @@ public class UserLoginLogDO extends BaseDO implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        result = prime * result + ((getLoginType() == null) ? 0 : getLoginType().hashCode());
+        result = prime * result + ((getLogoutType() == null) ? 0 : getLogoutType().hashCode());
         result = prime * result + ((getDevice() == null) ? 0 : getDevice().hashCode());
-        result = prime * result + ((getLoginTime() == null) ? 0 : getLoginTime().hashCode());
+        result = prime * result + ((getLogoutTime() == null) ? 0 : getLogoutTime().hashCode());
         result = prime * result + ((getIp() == null) ? 0 : getIp().hashCode());
         result = prime * result + ((getCreateUser() == null) ? 0 : getCreateUser().hashCode());
         result = prime * result + ((getUpdateUser() == null) ? 0 : getUpdateUser().hashCode());
@@ -104,9 +104,9 @@ public class UserLoginLogDO extends BaseDO implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", userId=").append(userId);
-        sb.append(", loginType=").append(loginType);
+        sb.append(", logoutType=").append(logoutType);
         sb.append(", device=").append(device);
-        sb.append(", loginTime=").append(loginTime);
+        sb.append(", logoutTime=").append(logoutTime);
         sb.append(", ip=").append(ip);
         sb.append(", createUser=").append(getCreateUser());
         sb.append(", updateUser=").append(getUpdateUser());

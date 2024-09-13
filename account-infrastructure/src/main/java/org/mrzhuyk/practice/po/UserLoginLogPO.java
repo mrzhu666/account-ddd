@@ -1,35 +1,51 @@
-package org.mrzhuyk.practice.dataobject;
+package org.mrzhuyk.practice.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-
+import java.util.Date;
 import lombok.Data;
 import org.mrzhuyk.practice.model.BaseDO;
 
 /**
- * 用户邮箱认证表
- * @TableName user_auth_email
+ * 用户登录日志表
+ * @TableName user_login_log
  */
-@TableName(value ="user_auth_email")
+@TableName(value ="user_login_log")
 @Data
-public class UserAuthEmailDO extends BaseDO implements Serializable {
+public class UserLoginLogPO extends BaseDO implements Serializable {
+    /**
+     * 自增ID
+     */
+    @TableId(type = IdType.AUTO)
+    private Long id;
+
     /**
      * 用户ID
      */
-    @TableId
     private Long userId;
 
     /**
-     * 邮箱
+     * 登录方式：1:手机;2:邮箱
      */
-    private String email;
+    private Integer loginType;
 
     /**
-     * 密码
+     * 登录设备：1:手机;2:web
      */
-    private String password;
+    private Integer device;
+
+    /**
+     * 登录时间
+     */
+    private Date loginTime;
+
+    /**
+     * 登录IP地址
+     */
+    private String ip;
 
 
     @TableField(exist = false)
@@ -46,10 +62,13 @@ public class UserAuthEmailDO extends BaseDO implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        UserAuthEmailDO other = (UserAuthEmailDO) that;
-        return (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getEmail() == null ? other.getEmail() == null : this.getEmail().equals(other.getEmail()))
-            && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
+        UserLoginLogPO other = (UserLoginLogPO) that;
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+            && (this.getLoginType() == null ? other.getLoginType() == null : this.getLoginType().equals(other.getLoginType()))
+            && (this.getDevice() == null ? other.getDevice() == null : this.getDevice().equals(other.getDevice()))
+            && (this.getLoginTime() == null ? other.getLoginTime() == null : this.getLoginTime().equals(other.getLoginTime()))
+            && (this.getIp() == null ? other.getIp() == null : this.getIp().equals(other.getIp()))
             && (this.getCreateUser() == null ? other.getCreateUser() == null : this.getCreateUser().equals(other.getCreateUser()))
             && (this.getUpdateUser() == null ? other.getUpdateUser() == null : this.getUpdateUser().equals(other.getUpdateUser()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
@@ -62,9 +81,12 @@ public class UserAuthEmailDO extends BaseDO implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
-        result = prime * result + ((getPassword() == null) ? 0 : getPassword().hashCode());
+        result = prime * result + ((getLoginType() == null) ? 0 : getLoginType().hashCode());
+        result = prime * result + ((getDevice() == null) ? 0 : getDevice().hashCode());
+        result = prime * result + ((getLoginTime() == null) ? 0 : getLoginTime().hashCode());
+        result = prime * result + ((getIp() == null) ? 0 : getIp().hashCode());
         result = prime * result + ((getCreateUser() == null) ? 0 : getCreateUser().hashCode());
         result = prime * result + ((getUpdateUser() == null) ? 0 : getUpdateUser().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
@@ -80,9 +102,12 @@ public class UserAuthEmailDO extends BaseDO implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
         sb.append(", userId=").append(userId);
-        sb.append(", email=").append(email);
-        sb.append(", password=").append(password);
+        sb.append(", loginType=").append(loginType);
+        sb.append(", device=").append(device);
+        sb.append(", loginTime=").append(loginTime);
+        sb.append(", ip=").append(ip);
         sb.append(", createUser=").append(getCreateUser());
         sb.append(", updateUser=").append(getUpdateUser());
         sb.append(", createTime=").append(getCreateTime());

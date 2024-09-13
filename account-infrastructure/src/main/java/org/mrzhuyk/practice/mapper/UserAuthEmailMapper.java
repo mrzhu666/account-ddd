@@ -1,6 +1,6 @@
 package org.mrzhuyk.practice.mapper;
 
-import org.mrzhuyk.practice.dataobject.UserAuthEmailDO;
+import org.mrzhuyk.practice.po.UserAuthEmailPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-09-07 19:03:03
 * @Entity generator.domain.UserAuthEmail
 */
-public interface UserAuthEmailMapper extends BaseMapper<UserAuthEmailDO> {
+public interface UserAuthEmailMapper extends BaseMapper<UserAuthEmailPO> {
 
 }
 
