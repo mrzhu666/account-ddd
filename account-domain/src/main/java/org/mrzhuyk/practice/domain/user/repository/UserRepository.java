@@ -40,13 +40,21 @@ public interface UserRepository {
     
     
     /**
-     * 根据邮箱或者手机查询用户实体，邮箱和手机不能同时为空
+     * 根据邮箱查询用户实体
      *
-     * @param email 邮箱，可以为空
-     * @param mobile 手机，可以为空
+     * @param email 邮箱
      * @return 用户实体，查询不到返回null
      */
-    UserEntity getByEmailOrMobile(String email,String mobile);
+    UserEntity getByEmail(String email);
+    
+    
+    /**
+     * 根据手机查询用户实体
+     *
+     * @param mobile 手机号
+     * @return 用户实体，查询不到返回null
+     */
+    UserEntity getByMobile(String mobile);
     
     
     /**

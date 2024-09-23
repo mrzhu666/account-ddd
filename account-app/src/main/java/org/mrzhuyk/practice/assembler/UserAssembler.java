@@ -34,8 +34,7 @@ public class UserAssembler {
     
     public static UserLoginParam userLoginParam(UserLoginCmd userLoginCmd) {
         UserLoginParam userLoginParam = new UserLoginParam();
-        userLoginParam.setMobile(userLoginCmd.getMobile());
-        userLoginParam.setEmail(userLoginCmd.getEmail());
+        userLoginParam.setUserAccount(userLoginCmd.getUserAccount());
         userLoginParam.setPassword(userLoginCmd.getPassword());
         return userLoginParam;
         

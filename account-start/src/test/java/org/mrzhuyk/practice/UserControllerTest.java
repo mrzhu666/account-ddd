@@ -54,13 +54,13 @@ public class UserControllerTest {
     @Test
     public void testLogin() {
         UserLoginCmd userLoginMobile = new UserLoginCmd();
-        userLoginMobile.setMobile("13123456789");
+        userLoginMobile.setUserAccount("13123456789");
         userLoginMobile.setPassword("12345678aA!");
         Response<UserInfoVO> login = userController.login(userLoginMobile);
         Assert.notNull(login.getData(), "手机登录失败");
         
         UserLoginCmd userLoginEmail = new UserLoginCmd();
-        userLoginEmail.setEmail("12345678901@qq.com");
+        userLoginEmail.setUserAccount("12345678901@qq.com");
         userLoginEmail.setPassword("12345678aA!");
         login = userController.login(userLoginEmail);
         Assert.notNull(login.getData(), "邮箱登录失败");

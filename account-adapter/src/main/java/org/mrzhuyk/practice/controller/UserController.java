@@ -13,10 +13,13 @@ import org.mrzhuyk.practice.Response;
 import org.mrzhuyk.practice.domain.user.model.UserInfo;
 import org.mrzhuyk.practice.dto.command.UserLoginCmd;
 import org.mrzhuyk.practice.dto.command.UserRegisterCmd;
+import org.mrzhuyk.practice.exception.BizException;
+import org.mrzhuyk.practice.exception.ErrorEnum;
 import org.mrzhuyk.practice.executor.command.UserLoginCmdExe;
 import org.mrzhuyk.practice.executor.command.UserRegisterCmdExe;
 import org.mrzhuyk.practice.executor.query.UserInfoByIdQueryExe;
 import org.mrzhuyk.practice.executor.query.UserLoginStatusQueryExe;
+import org.mrzhuyk.practice.util.PatternUtil;
 import org.mrzhuyk.practice.vo.UserInfoVO;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +57,9 @@ public class UserController {
     @Operation(summary = "用户登录")
     @PostMapping("/login")
     public Response<UserInfoVO> login(@Validated @RequestBody UserLoginCmd userLoginCmd) {
+        if(!(PatternUtil.matchEmail(userLoginCmd.getUserAccount()) || PatternUtil.matchMobile(userLoginCmd.getUserAccount()))) {
+            throw new BizException(ErrorEnum.PARAMS_ERROR, "请输入正确的手机号或邮箱");
+        }
         return Response.success(userLoginCmdExe.execute(userLoginCmd));
     }
     

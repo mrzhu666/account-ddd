@@ -14,6 +14,7 @@ import org.mrzhuyk.practice.domain.user.service.UserSerivce;
 import org.mrzhuyk.practice.dto.command.UserLoginCmd;
 import org.mrzhuyk.practice.exception.BizException;
 import org.mrzhuyk.practice.exception.ErrorEnum;
+import org.mrzhuyk.practice.util.PatternUtil;
 import org.springframework.stereotype.Service;
 
 
@@ -70,17 +71,19 @@ public class UserSerivceImpl implements UserSerivce {
     
     @Override
     public UserEntity login(UserLoginCmd userLoginCmd) {
-        String mobile = userLoginCmd.getMobile();
-        String email = userLoginCmd.getEmail();
+
         String password = userLoginCmd.getPassword();
-        if (StringUtils.isBlank(mobile) && StringUtils.isBlank(email)) {
-            throw new BizException(ErrorEnum.PARAMS_ERROR, "请输入手机号或邮箱");
-        }
         if (StringUtils.isBlank(password)) {
             throw new BizException(ErrorEnum.PARAMS_ERROR, "请输入密码");
         }
+        String userAccount = userLoginCmd.getUserAccount();
+        UserEntity userEntity = null;
+        if(PatternUtil.matchEmail(userAccount)) {
+            userEntity = userRepository.getByEmail(userAccount);
+        } else if (PatternUtil.matchMobile(userAccount)) {
+            userEntity = userRepository.getByMobile(userAccount);
+        }
         
-        UserEntity userEntity = userRepository.getByEmailOrMobile(email, mobile);
         if (ObjectUtils.isEmpty(userEntity)) {
             throw new BizException(ErrorEnum.PARAMS_ERROR, "用户不存在或密码错误");
         }

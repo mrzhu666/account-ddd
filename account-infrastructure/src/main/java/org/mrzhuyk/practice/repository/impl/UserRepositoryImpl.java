@@ -3,6 +3,7 @@ package org.mrzhuyk.practice.repository.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.mrzhuyk.practice.convertor.UserConvertor;
 import org.mrzhuyk.practice.po.UserAuthEmailPO;
 import org.mrzhuyk.practice.po.UserAuthMobilePO;
@@ -41,37 +42,35 @@ public class UserRepositoryImpl implements UserRepository {
         
     }
     
+    
     @Override
-    public UserEntity getByEmailOrMobile(String email, String mobile) {
-        if (ObjectUtils.isEmpty(email) && ObjectUtils.isEmpty(mobile)) {
-            return null;
-        }
-        UserEntity userEntity;
-        if (ObjectUtils.isNotEmpty(email)) {
-            // 封装条件
-            LambdaQueryWrapper<UserAuthEmailPO> userAuthEmailDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            userAuthEmailDOLambdaQueryWrapper.eq(UserAuthEmailPO::getEmail, email);
-            UserAuthEmailPO userAuthEmailPO = userAuthEmailMapper.selectOne(userAuthEmailDOLambdaQueryWrapper);
-            // 查询结果为空
-            if (userAuthEmailPO == null) return null;
-            
-            Long userId = userAuthEmailPO.getUserId();
-            UserInfoPO userInfoPO = userInfoMapper.selectById(userId);
-            userEntity = UserConvertor.userEntity(userInfoPO, userAuthEmailPO);
-            
-        } else {
-            // 封装查询条件
-            LambdaQueryWrapper<UserAuthMobilePO> userAuthMobileDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            userAuthMobileDOLambdaQueryWrapper.eq(UserAuthMobilePO::getMobile, mobile);
-            UserAuthMobilePO userAuthMobilePO = userAuthMobileMapper.selectOne(userAuthMobileDOLambdaQueryWrapper);
-            // 查询结果为空
-            if (userAuthMobilePO == null) return null;
-            
-            Long userId = userAuthMobilePO.getUserId();
-            UserInfoPO userInfoPO = userInfoMapper.selectById(userId);
-            userEntity = UserConvertor.userEntity(userInfoPO, userAuthMobilePO);
-        }
+    public UserEntity getByEmail(String email) {
+        // 封装查询条件
+        if(StringUtils.isBlank(email)) return null;
+        LambdaQueryWrapper<UserAuthEmailPO> userAuthEmailDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userAuthEmailDOLambdaQueryWrapper.eq(UserAuthEmailPO::getEmail, email);
+        UserAuthEmailPO userAuthEmailPO = userAuthEmailMapper.selectOne(userAuthEmailDOLambdaQueryWrapper);
+        // 查询结果为空
+        if (userAuthEmailPO == null) return null;
         
+        Long userId = userAuthEmailPO.getUserId();
+        UserInfoPO userInfoPO = userInfoMapper.selectById(userId);
+        UserEntity userEntity = UserConvertor.userEntity(userInfoPO, userAuthEmailPO);
+        return userEntity;
+    }
+    
+    @Override
+    public UserEntity getByMobile(String mobile) {
+        // 封装查询条件
+        LambdaQueryWrapper<UserAuthMobilePO> userAuthMobileDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userAuthMobileDOLambdaQueryWrapper.eq(UserAuthMobilePO::getMobile, mobile);
+        UserAuthMobilePO userAuthMobilePO = userAuthMobileMapper.selectOne(userAuthMobileDOLambdaQueryWrapper);
+        // 查询结果为空
+        if (userAuthMobilePO == null) return null;
+        
+        Long userId = userAuthMobilePO.getUserId();
+        UserInfoPO userInfoPO = userInfoMapper.selectById(userId);
+        UserEntity userEntity = UserConvertor.userEntity(userInfoPO, userAuthMobilePO);
         return userEntity;
     }
     
