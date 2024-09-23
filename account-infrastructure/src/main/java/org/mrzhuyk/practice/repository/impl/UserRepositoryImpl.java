@@ -5,6 +5,8 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mrzhuyk.practice.convertor.UserConvertor;
+import org.mrzhuyk.practice.domain.user.model.LoginInfo;
+import org.mrzhuyk.practice.mapper.UserLoginLogMapper;
 import org.mrzhuyk.practice.po.UserAuthEmailPO;
 import org.mrzhuyk.practice.po.UserAuthMobilePO;
 import org.mrzhuyk.practice.po.UserInfoPO;
@@ -13,6 +15,7 @@ import org.mrzhuyk.practice.domain.user.model.UserEntity;
 import org.mrzhuyk.practice.mapper.UserAuthEmailMapper;
 import org.mrzhuyk.practice.mapper.UserAuthMobileMapper;
 import org.mrzhuyk.practice.mapper.UserInfoMapper;
+import org.mrzhuyk.practice.po.UserLoginLogPO;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -26,6 +29,9 @@ public class UserRepositoryImpl implements UserRepository {
     
     @Resource
     UserAuthMobileMapper userAuthMobileMapper;
+    
+    @Resource
+    UserLoginLogMapper userLoginLogMapper;
     
     @Override
     public UserEntity getByUserId(Long userId) {
@@ -46,7 +52,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserEntity getByEmail(String email) {
         // 封装查询条件
-        if(StringUtils.isBlank(email)) return null;
+        if (StringUtils.isBlank(email)) return null;
         LambdaQueryWrapper<UserAuthEmailPO> userAuthEmailDOLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userAuthEmailDOLambdaQueryWrapper.eq(UserAuthEmailPO::getEmail, email);
         UserAuthEmailPO userAuthEmailPO = userAuthEmailMapper.selectOne(userAuthEmailDOLambdaQueryWrapper);
@@ -55,8 +61,7 @@ public class UserRepositoryImpl implements UserRepository {
         
         Long userId = userAuthEmailPO.getUserId();
         UserInfoPO userInfoPO = userInfoMapper.selectById(userId);
-        UserEntity userEntity = UserConvertor.userEntity(userInfoPO, userAuthEmailPO);
-        return userEntity;
+        return UserConvertor.userEntity(userInfoPO, userAuthEmailPO);
     }
     
     @Override
@@ -70,8 +75,7 @@ public class UserRepositoryImpl implements UserRepository {
         
         Long userId = userAuthMobilePO.getUserId();
         UserInfoPO userInfoPO = userInfoMapper.selectById(userId);
-        UserEntity userEntity = UserConvertor.userEntity(userInfoPO, userAuthMobilePO);
-        return userEntity;
+        return UserConvertor.userEntity(userInfoPO, userAuthMobilePO);
     }
     
     @Override
@@ -79,6 +83,12 @@ public class UserRepositoryImpl implements UserRepository {
         UserInfoPO userInfoPO = UserConvertor.userInfoDO(userEntity.getUserInfo());
         userInfoMapper.insert(userInfoPO);
         return userInfoPO.getUserId();
+    }
+    
+    @Override
+    public boolean insertLoginInfo(LoginInfo loginInfo) {
+        UserLoginLogPO userLoginLogPO = UserConvertor.userLoginLog(loginInfo);
+        return userLoginLogMapper.insert(userLoginLogPO) > 0;
     }
     
     @Override

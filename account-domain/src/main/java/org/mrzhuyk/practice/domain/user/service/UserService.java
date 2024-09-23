@@ -1,12 +1,10 @@
 package org.mrzhuyk.practice.domain.user.service;
 
 import org.mrzhuyk.practice.domain.user.model.UserEntity;
-import org.mrzhuyk.practice.domain.user.model.UserInfo;
 import org.mrzhuyk.practice.domain.user.param.UserRegisterParam;
 import org.mrzhuyk.practice.dto.command.UserLoginCmd;
-import org.mrzhuyk.practice.vo.UserInfoVO;
 
-public interface UserSerivce {
+public interface UserService {
     
     /**
      * 查询用户信息

@@ -1,5 +1,6 @@
 package org.mrzhuyk.practice.domain.user.repository;
 
+import org.mrzhuyk.practice.domain.user.model.LoginInfo;
 import org.mrzhuyk.practice.domain.user.model.UserEntity;
 
 public interface UserRepository {
@@ -11,6 +12,16 @@ public interface UserRepository {
      * @return 用户ID
      */
     long insertUserInfo(UserEntity userEntity);
+    
+    
+    /**
+     * 插入登录信息
+     *
+     * @param loginInfo 登录信息
+     * @return true:插入成功; false:插入失败
+     */
+    boolean insertLoginInfo(LoginInfo loginInfo);
+    
     
     /**
      * 插入邮箱认证

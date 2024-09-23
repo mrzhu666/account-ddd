@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.mrzhuyk.practice.domain.user.enums.Device;
+import org.mrzhuyk.practice.domain.user.enums.LoginType;
 import org.mrzhuyk.practice.util.HttpServletContext;
 
 import java.util.Date;
@@ -43,15 +44,22 @@ public class LoginInfo {
      */
     private String ip;
     
-    public static LoginInfo build(UserEntity userEntity) {
+    /**
+     * 返回登录信息
+     *
+     * @param userEntity 用户实体，只使用用户ID
+     * @param loginType  登录方式
+     * @return 登录信息
+     */
+    public static LoginInfo getLoginInfo(UserEntity userEntity, LoginType loginType) {
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setUserId(userEntity.getUserInfo().getUserId());
-        loginInfo.setLoginType(Device.getDevice(HttpServletContext.getRequest()).getType());
-        loginInfo.setDevice(0);
+        loginInfo.setLoginType(loginType.getType());
+        loginInfo.setDevice(Device.getDevice(HttpServletContext.getRequest()).getType());
         loginInfo.setLoginTime(new Date());
         loginInfo.setIp(HttpServletContext.getIpAddress());
         
         return loginInfo;
     }
-
+    
 }

@@ -5,22 +5,23 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.mrzhuyk.practice.domain.user.enums.LoginType;
+import org.mrzhuyk.practice.domain.user.model.LoginInfo;
 import org.mrzhuyk.practice.domain.user.model.UserEntity;
 import org.mrzhuyk.practice.domain.user.model.UserInfo;
 import org.mrzhuyk.practice.domain.user.model.copyor.UserCopyor;
 import org.mrzhuyk.practice.domain.user.param.UserRegisterParam;
 import org.mrzhuyk.practice.domain.user.repository.UserRepository;
-import org.mrzhuyk.practice.domain.user.service.UserSerivce;
+import org.mrzhuyk.practice.domain.user.service.UserService;
 import org.mrzhuyk.practice.dto.command.UserLoginCmd;
 import org.mrzhuyk.practice.exception.BizException;
 import org.mrzhuyk.practice.exception.ErrorEnum;
-import org.mrzhuyk.practice.util.PatternUtil;
 import org.springframework.stereotype.Service;
 
 
 @Slf4j
 @Service
-public class UserSerivceImpl implements UserSerivce {
+public class UserServiceImpl implements UserService {
     
     
     @Resource
@@ -76,11 +77,20 @@ public class UserSerivceImpl implements UserSerivce {
         if (StringUtils.isBlank(password)) {
             throw new BizException(ErrorEnum.PARAMS_ERROR, "请输入密码");
         }
+        
         String userAccount = userLoginCmd.getUserAccount();
+        // 判断登录账号的登录方式
+        LoginType loginType = LoginType.getByUserAccount(userAccount);
+        if (ObjectUtils.isEmpty(loginType)) {
+            throw new BizException(ErrorEnum.PARAMS_ERROR, "用户不存在或密码错误");
+        }
+        
         UserEntity userEntity = null;
-        if(PatternUtil.matchEmail(userAccount)) {
+        if(loginType==LoginType.EMAIL) {
+            // 邮箱登录
             userEntity = userRepository.getByEmail(userAccount);
-        } else if (PatternUtil.matchMobile(userAccount)) {
+        } else if (loginType==LoginType.MOBILE) {
+            // 手机号登录
             userEntity = userRepository.getByMobile(userAccount);
         }
         
@@ -90,6 +100,10 @@ public class UserSerivceImpl implements UserSerivce {
         if (!userEntity.isCorrectPassword(password)) {
             throw new BizException(ErrorEnum.PARAMS_ERROR, "用户不存在或密码错误");
         }
+        
+        LoginInfo loginInfo = LoginInfo.getLoginInfo(userEntity, loginType);
+        userRepository.insertLoginInfo(loginInfo);
+        
         // 设置用户态
         UserEntity.setSessionUserEntity(userEntity);
         return userEntity;

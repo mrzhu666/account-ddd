@@ -1,11 +1,8 @@
 package org.mrzhuyk.practice.domain.user.enums;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.mrzhuyk.practice.domain.user.model.UserEntity;
+import org.mrzhuyk.practice.util.PatternUtil;
 
 @Getter
 @AllArgsConstructor
@@ -28,15 +25,15 @@ public enum LoginType {
     
     
     /**
-     * 根据用户实体的
+     * 根据用户登录命令获取登录类型
      *
-     * @param userEntity 用户实体
+     * @param userAccount 用户登录账号
      * @return 登录方式
      */
-    public static LoginType checkMobileOrEmail(UserEntity userEntity) {
-        if (StringUtils.isNotBlank(userEntity.getUserInfo().getMobile())) {
+    public static LoginType getByUserAccount(String userAccount) {
+        if (PatternUtil.matchMobile(userAccount)) {
             return LoginType.MOBILE;
-        } else if (StringUtils.isNotBlank(userEntity.getUserInfo().getEmail())) {
+        } else if (PatternUtil.matchEmail(userAccount)) {
             return LoginType.EMAIL;
         }
         return null;

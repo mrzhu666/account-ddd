@@ -1,11 +1,13 @@
 package org.mrzhuyk.practice.convertor;
 
+import org.mrzhuyk.practice.domain.user.model.LoginInfo;
 import org.mrzhuyk.practice.po.UserAuthEmailPO;
 import org.mrzhuyk.practice.po.UserAuthMobilePO;
 import org.mrzhuyk.practice.po.UserInfoPO;
 import org.mrzhuyk.practice.domain.user.model.UserEncryptPassword;
 import org.mrzhuyk.practice.domain.user.model.UserEntity;
 import org.mrzhuyk.practice.domain.user.model.UserInfo;
+import org.mrzhuyk.practice.po.UserLoginLogPO;
 
 public class UserConvertor {
     public static UserEntity userEntity(UserInfoPO userInfoPO, UserAuthMobilePO userAuthMobilePO) {
@@ -39,7 +41,6 @@ public class UserConvertor {
     }
     
     
-    
     public static UserInfoPO userInfoDO(UserInfo userInfo) {
         UserInfoPO userInfoPO = new UserInfoPO();
         userInfoPO.setUserId(userInfo.getUserId());
@@ -66,6 +67,17 @@ public class UserConvertor {
         userAuthMobilePO.setMobile(userEntity.getUserInfo().getMobile());
         userAuthMobilePO.setPassword(userEntity.getEncryptedPassword());
         return userAuthMobilePO;
+    }
+    
+    public static UserLoginLogPO userLoginLog(LoginInfo loginInfo) {
+        UserLoginLogPO userLoginLogPO = new UserLoginLogPO();
+        userLoginLogPO.setUserId(loginInfo.getUserId());
+        userLoginLogPO.setLoginType(loginInfo.getLoginType());
+        userLoginLogPO.setDevice(loginInfo.getDevice());
+        userLoginLogPO.setLoginTime(loginInfo.getLoginTime());
+        userLoginLogPO.setIp(loginInfo.getIp());
+        return userLoginLogPO;
+        
     }
     
 }
