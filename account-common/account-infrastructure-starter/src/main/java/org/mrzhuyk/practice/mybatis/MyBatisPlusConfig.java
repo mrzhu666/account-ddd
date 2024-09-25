@@ -3,12 +3,12 @@ package org.mrzhuyk.practice.mybatis;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 分页配置
- *
+ * 配置类
  */
 @Configuration
 public class MyBatisPlusConfig {
@@ -22,5 +22,15 @@ public class MyBatisPlusConfig {
         // 分页插件
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
+    }
+    
+    
+    /**
+     * @return 脱敏拦截器
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "desensitization.database", name = "enable", havingValue = "true")
+    public MapperResultInterceptor mapperResultInterceptor() {
+        return new MapperResultInterceptor();
     }
 }

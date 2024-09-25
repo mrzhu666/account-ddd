@@ -38,5 +38,9 @@ dubbo:
     name: dubbo
     port: -1
 
+desensitization:
+  database:
+    enable: true # 开启数据脱敏
+
 server:
   port: 8081

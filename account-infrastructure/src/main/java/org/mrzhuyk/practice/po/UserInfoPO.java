@@ -7,7 +7,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
+import org.mrzhuyk.practice.desensitization.Desensitization;
+import org.mrzhuyk.practice.desensitization.DesensitizationType;
 import org.mrzhuyk.practice.model.BaseDO;
+import org.springframework.web.service.annotation.DeleteExchange;
 
 /**
  * 用户基础信息表
@@ -25,6 +28,7 @@ public class UserInfoPO extends BaseDO implements Serializable {
     /**
      * 真实名称
      */
+    @Desensitization(DesensitizationType.REAL_NAME)
     private String realName;
 
     /**
@@ -35,11 +39,13 @@ public class UserInfoPO extends BaseDO implements Serializable {
     /**
      * 手机号码
      */
+    @Desensitization(DesensitizationType.MOBILE)
     private String mobile;
 
     /**
      * 邮箱
      */
+    @Desensitization(DesensitizationType.EMAIL)
     private String email;
 
     /**

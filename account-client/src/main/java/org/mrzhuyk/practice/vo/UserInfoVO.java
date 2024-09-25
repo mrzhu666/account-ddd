@@ -3,6 +3,7 @@ package org.mrzhuyk.practice.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @Getter
 @Setter
+@ToString
 public class UserInfoVO implements Serializable {
     
     
